@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos App</title>
+</head>
+<script>
+
+    function todosData(data)
+    {
+        console.log(data);
+        for(var i = 0; i < data.length; i++)
+        {
+        var parentElement = document.getElementById("mainArea");
+            // parentElement.innerHTML = JSON.stringify(data);
+            var childElement = document.createElement("div");
+            childElement.innerHTML = data[i].title;
+            parentElement.appendChild(childElement);
+        }
+    }
+
+    function callback1(resp)
+    {
+        resp.json().then(todosData);
+    }
+
+    function getData()
+    {
+    fetch("http://localhost:3000/todos", {
+        method : "GET"
+    }).then(callback1);
+}
+
+getData();
+
+    function parsedResponse(data){
+            console.log(data);  
+        }
+
+    function callback(response){
+        response.json().then(parsedResponse)
+        }
+    function onPress(){
+        var title = document.getElementById("title").value;
+        var description = document.getElementById("description").value;
+        console.log(title);
+        
+        fetch("http://localhost:3000/todos", {
+            method: "POST",
+            body: JSON.stringify({
+                title : title,
+                description :description
+            }),
+            headers: {
+                "Content-type": "application/json; charset=UTF-8"
+            }
+    
+        }).then(callback);
+    }
+</script>
+<body>
+    <label for="fname">Todo-Title</label>
+    <input type="text" id="title" name="title"><br><br>
+    <label for="lname">Todo-Description</label>
+    <input type="text" id="description" name="description"><br><br>
+    <input type="submit" onclick= "onPress()" value="Submit">
+    <div id= "mainArea">
+
+    </div>
+</body>
+</html>
